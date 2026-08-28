@@ -1,0 +1,14 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import SettingsForm from '../components/SettingsForm';
+---
+
+<AppShell title="Settings" active="settings">
+  <div class="mb-6">
+    <h1 class="text-xl font-semibold text-text">Settings</h1>
+    <p class="mt-1 text-sm text-text-dim">
+      Profile, rules, and whimsy — every fact the app uses, in one place.
+    </p>
+  </div>
+  <SettingsForm client:load />
+</AppShell>

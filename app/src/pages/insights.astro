@@ -1,0 +1,15 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import InsightsView from '../components/InsightsView';
+---
+
+<AppShell title="Insights" active="insights">
+  <div class="mb-6">
+    <h1 class="text-xl font-semibold text-text">Insights</h1>
+    <p class="mt-1 text-sm text-text-dim">
+      Funnel, deaths-by-stage, rejection reasons, win-rates, weekly pace — and the lessons
+      log as evidence.
+    </p>
+  </div>
+  <InsightsView client:load />
+</AppShell>

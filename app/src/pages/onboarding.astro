@@ -1,0 +1,14 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import OnboardingWizard from '../components/OnboardingWizard';
+---
+
+<AppShell title="Onboarding" active="onboarding">
+  <div class="mb-6">
+    <h1 class="text-xl font-semibold text-text">Onboarding</h1>
+    <p class="mt-1 text-sm text-text-dim">
+      The resume-builder setup interview, as screens.
+    </p>
+  </div>
+  <OnboardingWizard client:load />
+</AppShell>

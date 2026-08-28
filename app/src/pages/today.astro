@@ -1,0 +1,18 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import TodayQueue from '../components/TodayQueue';
+import SweepPanel from '../components/SweepPanel';
+---
+
+<AppShell title="Today" active="today">
+  <div class="mb-6">
+    <h1 class="text-xl font-semibold text-text">Today</h1>
+    <p class="mt-1 text-sm text-text-dim">
+      Everything due, one card each, one button each.
+    </p>
+  </div>
+  <div class="mb-4">
+    <SweepPanel client:load />
+  </div>
+  <TodayQueue client:load />
+</AppShell>

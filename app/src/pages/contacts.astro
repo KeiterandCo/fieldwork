@@ -1,0 +1,12 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import ContactsTable from '../components/ContactsTable';
+---
+
+<AppShell title="Contacts" active="contacts">
+  <div class="mb-6">
+    <h1 class="text-xl font-semibold text-text">Contacts</h1>
+    <p class="mt-1 text-sm text-text-dim">Everyone you're staying in touch with.</p>
+  </div>
+  <ContactsTable client:load />
+</AppShell>

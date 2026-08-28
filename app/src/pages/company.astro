@@ -1,0 +1,11 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import DossierRouter from '../components/DossierRouter';
+---
+
+<AppShell title="Dossier" active="company">
+  <a href="/pipeline" class="mb-4 inline-block text-sm text-text-dim hover:text-text">
+    ← Back to Pipeline
+  </a>
+  <DossierRouter client:load />
+</AppShell>

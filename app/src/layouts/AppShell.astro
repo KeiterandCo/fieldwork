@@ -1,0 +1,187 @@
+---
+import '../styles/global.css';
+import ThemeToggle from '../components/ThemeToggle';
+import SessionGuard from '../components/SessionGuard';
+
+interface Props {
+  title: string;
+  active:
+    | 'today'
+    | 'pipeline'
+    | 'intake'
+    | 'contacts'
+    | 'insights'
+    | 'settings'
+    | 'company'
+    | 'onboarding';
+}
+
+const { title, active } = Astro.props;
+
+// Inline line-art icons (24x24, currentColor stroke) replace the old emoji — they inherit the
+// nav item's color so the active item glows accent and the rest stay quiet.
+const svg = (inner: string) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">${inner}</svg>`;
+
+const navItems = [
+  {
+    key: 'today',
+    label: 'Today',
+    href: '/today',
+    icon: svg(
+      '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>'
+    ),
+  },
+  {
+    key: 'pipeline',
+    label: 'Pipeline',
+    href: '/pipeline',
+    icon: svg(
+      '<rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="5" height="13" rx="1.5"/>'
+    ),
+  },
+  {
+    key: 'intake',
+    label: 'Intake',
+    href: '/intake',
+    icon: svg(
+      '<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>'
+    ),
+  },
+  {
+    key: 'contacts',
+    label: 'Contacts',
+    href: '/contacts',
+    icon: svg(
+      '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'
+    ),
+  },
+  {
+    key: 'insights',
+    label: 'Insights',
+    href: '/insights',
+    icon: svg('<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>'),
+  },
+  {
+    key: 'settings',
+    label: 'Settings',
+    href: '/settings',
+    icon: svg(
+      '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'
+    ),
+  },
+] as const;
+
+// Little flag-in-a-field mark for the wordmark (fieldwork = plant your flag).
+const logoMark = svg('<path d="M4 22V3"/><path d="M4 4h13l-2.5 3.5L17 11H4"/>');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} · Fieldwork</title>
+    <script is:inline>
+      // Apply persisted theme before paint to avoid a flash of the wrong palette.
+      (function () {
+        try {
+          var stored = window.localStorage.getItem('fieldwork-theme');
+          document.documentElement.setAttribute('data-theme', stored || 'dark');
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-bg text-text">
+    <SessionGuard client:load />
+    <div class="flex min-h-screen">
+      <aside class="flex w-56 shrink-0 flex-col border-r border-border bg-surface px-4 py-6">
+        <div class="mb-8 flex items-center gap-2 px-2">
+          <span class="text-accent" aria-hidden="true" set:html={logoMark} />
+          <div>
+            <p
+              class="text-lg font-semibold tracking-tight"
+              style="background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent;"
+            >
+              Fieldwork
+            </p>
+            <p class="text-xs text-text-dim">the job-search cockpit</p>
+          </div>
+        </div>
+        <nav class="flex flex-1 flex-col gap-1">
+          {
+            navItems.map((item) => (
+              <a
+                href={item.href}
+                class:list={[
+                  'group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
+                  active === item.key
+                    ? 'bg-surface-2 font-medium text-text'
+                    : 'text-text-dim hover:bg-surface-2 hover:text-text',
+                ]}
+              >
+                <span
+                  aria-hidden="true"
+                  class:list={[
+                    'absolute left-0 top-1/2 -translate-y-1/2 rounded-r-full bg-accent transition-all duration-200',
+                    active === item.key ? 'h-5 w-1' : 'h-0 w-0',
+                  ]}
+                />
+                <span
+                  aria-hidden="true"
+                  set:html={item.icon}
+                  class:list={[
+                    'flex transition-transform duration-200 group-hover:scale-110',
+                    active === item.key ? 'text-accent' : 'text-text-dim group-hover:text-text',
+                  ]}
+                />
+                <span>{item.label}</span>
+              </a>
+            ))
+          }
+        </nav>
+        <div class="mt-6 flex flex-col gap-3 px-2">
+          <p
+            id="fw-cheer"
+            class="min-h-[1rem] text-xs italic text-text-dim"
+            style="transition:opacity 250ms ease;"
+          >
+          </p>
+          <ThemeToggle client:load />
+        </div>
+        <script is:inline>
+          (function () {
+            var el = document.getElementById('fw-cheer');
+            if (!el) return;
+            var lines = [
+              'keep going.',
+              'one good yes is enough.',
+              'you have got this.',
+              'onward, builder.',
+              'small steps, real progress.',
+              'the right seat is out there.',
+              'proof over theory.',
+              'made with love, for you.',
+            ];
+            var i = Math.floor(Date.now() / 1000) % lines.length;
+            el.textContent = lines[i];
+            setInterval(function () {
+              i = (i + 1) % lines.length;
+              el.style.opacity = '0';
+              setTimeout(function () {
+                el.textContent = lines[i];
+                el.style.opacity = '1';
+              }, 250);
+            }, 5000);
+          })();
+        </script>
+      </aside>
+      <main class="flex-1 overflow-y-auto px-8 py-8">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

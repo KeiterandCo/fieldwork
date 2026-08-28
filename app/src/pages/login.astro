@@ -1,0 +1,33 @@
+---
+import '../styles/global.css';
+import LoginForm from '../components/LoginForm';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Sign in · Fieldwork</title>
+    <script is:inline>
+      (function () {
+        try {
+          var stored = window.localStorage.getItem('fieldwork-theme');
+          document.documentElement.setAttribute('data-theme', stored || 'dark');
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
+  </head>
+  <body class="flex min-h-screen items-center justify-center bg-bg text-text">
+    <div class="w-full max-w-sm px-6">
+      <div class="mb-8 text-center">
+        <p class="text-2xl font-semibold tracking-tight">Fieldwork</p>
+        <p class="mt-1 text-sm text-text-dim">Sign in to your job-search cockpit.</p>
+      </div>
+      <LoginForm client:load />
+    </div>
+  </body>
+</html>
